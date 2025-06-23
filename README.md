@@ -1,33 +1,28 @@
 # 📚 Flask Bookstore App
 
-A simple web-based bookstore app built with Python, Flask, and SQLite.
+A simple, full-featured bookstore web application built using **Flask** and **SQLite**, with Bootstrap styling and admin-only controls. Perfect for learning CRUD operations, deployment, and Flask development.
 
 ## 🌐 Live Demo
 
-[Visit the live app](https://harnet7.pythonanywhere.com)
+👉 [Visit the live app](https://harnet7.pythonanywhere.com)
 
 ## 🚀 Features
 
-- Add, edit, and delete books
-- Filter by category
-- Admin password protection
-- Bootstrap-styled UI
-- Deployed on PythonAnywhere
+- 📖 Add, edit, and delete books
+- 🏷️ Assign and filter by category (Fiction, Non-Fiction, etc.)
+- 🔐 Admin password protection for editing and deleting
+- 🖥 Bootstrap-styled responsive interface
+- 📦 SQLite database
+- 🌍 Deployed on PythonAnywhere
 
-## ⚙️ Tech Stack
+## 🛠 Technologies Used
 
 - Python 3
 - Flask
 - SQLite
 - Bootstrap 5
 - PythonAnywhere (for hosting)
+- Git + GitHub
 
-## 🚀 Getting Started (Local Setup)
+## 💾 Project Structure
 
-```bash
-git clone https://github.com/yourusername/bookstore.git
-cd bookstore
-python -m venv venv
-source venv/bin/activate
-pip install flask
-python app.py
