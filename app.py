@@ -11,7 +11,9 @@ UPLOAD_FOLDER = 'static/uploads'
 os.makedirs(UPLOAD_FOLDER, exist_ok=True)
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
-DB_PATH = 'books.db'
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+DB_PATH = os.path.join(BASE_DIR, 'books.db')
+
 
 # Create the database and tables if not exist
 def init_db():
@@ -183,6 +185,9 @@ def logout():
     flash('You have been logged out.', 'info')
     return redirect('/login')
 
+# Initialize DB even when deployed
+init_db()
+
 if __name__ == '__main__':
-    init_db()
     app.run(debug=True)
+
