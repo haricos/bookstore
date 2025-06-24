@@ -14,15 +14,4 @@ A simple, full-featured bookstore web application built using **Flask** and **SQ
 - 🖥 Bootstrap-styled responsive interface
 - 📦 SQLite database
 - 🌍 Deployed on PythonAnywhere
-
-## 🛠 Technologies Used
-
-- Python 3
-- Flask
-- SQLite
-- Bootstrap 5
-- PythonAnywhere (for hosting)
-- Git + GitHub
-
-## 💾 Project Structure
-
+[![Render Status](https://render.com/api/v1/services/bookstore-jdl4/deploys/status.svg)](https://render.com/deploy/srv-d1ce082dbo4c73cpd140)

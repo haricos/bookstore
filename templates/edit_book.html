@@ -22,34 +22,50 @@
 
     <h2 class="mb-4">✏️ Edit Book</h2>
 
-    <form method="POST">
-        <div class="mb-3">
-            <label class="form-label">Title</label>
-            <input class="form-control" name="title" value="{{ book[1] }}" required>
-        </div>
-        <div class="mb-3">
-            <label class="form-label">Author</label>
-            <input class="form-control" name="author" value="{{ book[2] }}" required>
-        </div>
-        <div class="mb-3">
-            <label class="form-label">Price</label>
-            <input class="form-control" name="price" type="number" step="0.01" value="{{ book[3] }}" required>
-        </div>
-        <div class="mb-3">
-            <label class="form-label">Category</label>
-            <select class="form-select" name="category" required>
-                {% for cat in categories %}
-                    <option value="{{ cat }}" {% if cat == book[4] %}selected{% endif %}>{{ cat }}</option>
-                {% endfor %}
-            </select>
-        </div>
-        <div class="mb-3">
-            <label class="form-label">Admin Password</label>
-            <input class="form-control" type="password" name="password" required>
-        </div>
-        <button class="btn btn-success">Save Changes</button>
-        <a href="/books" class="btn btn-secondary ms-2">Cancel</a>
-    </form>
+    <form method="POST" enctype="multipart/form-data">
+    <!-- Title -->
+    <div class="mb-3">
+        <label class="form-label">Title</label>
+        <input class="form-control" name="title" value="{{ book[1] }}" required>
+    </div>
+
+    <!-- Author -->
+    <div class="mb-3">
+        <label class="form-label">Author</label>
+        <input class="form-control" name="author" value="{{ book[2] }}" required>
+    </div>
+
+    <!-- Price -->
+    <div class="mb-3">
+        <label class="form-label">Price</label>
+        <input class="form-control" name="price" type="number" step="0.01" value="{{ book[3] }}" required>
+    </div>
+
+    <!-- Category -->
+    <div class="mb-3">
+        <label class="form-label">Category</label>
+        <select class="form-select" name="category" required>
+            {% for cat in categories %}
+                <option value="{{ cat }}" {% if cat == book[4] %}selected{% endif %}>{{ cat }}</option>
+            {% endfor %}
+        </select>
+    </div>
+
+    <!-- ✅ New Image Upload Field -->
+    <div class="mb-3">
+        <label class="form-label">Replace Image (optional)</label>
+        <input class="form-control" type="file" name="image" accept="image/*">
+    </div>
+
+    <!-- Admin Password -->
+    <div class="mb-3">
+        <label class="form-label">Admin Password</label>
+        <input class="form-control" type="password" name="password" required>
+    </div>
+
+    <button class="btn btn-success">Save Changes</button>
+    <a href="/books" class="btn btn-secondary ms-2">Cancel</a>
+</form>
 
 </body>
 </html>

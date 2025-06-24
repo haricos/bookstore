@@ -82,6 +82,9 @@ def book_list():
     return render_template('book_list.html', books=books, categories=categories,
                            selected_category=category, search=search)
 
+from uuid import uuid4  # Add this at the top if not already
+
+# ➕ Add new book
 @app.route('/add', methods=['GET', 'POST'])
 def add_book():
     if request.method == 'POST':
@@ -91,23 +94,31 @@ def add_book():
         category = request.form['category']
         image = None
 
+        # Handle image upload
         if 'image' in request.files:
             image_file = request.files['image']
             if image_file and image_file.filename:
-                image = secure_filename(image_file.filename)
-                image_path = os.path.join(app.config['UPLOAD_FOLDER'], image)
+                # Rename image to prevent overwrite
+                filename = f"{uuid4().hex}_{secure_filename(image_file.filename)}"
+                image_path = os.path.join(app.config['UPLOAD_FOLDER'], filename)
                 image_file.save(image_path)
+                image = filename  # Store this name in DB
 
         conn = sqlite3.connect(DB_PATH)
-        conn.execute('INSERT INTO books (title, author, price, category, image) VALUES (?, ?, ?, ?, ?)',
-                     (title, author, price, category, image))
+        conn.execute(
+            'INSERT INTO books (title, author, price, category, image) VALUES (?, ?, ?, ?, ?)',
+            (title, author, price, category, image)
+        )
         conn.commit()
         conn.close()
-
         flash('Book added successfully!', 'success')
         return redirect('/books')
 
     return render_template('add_book.html')
+
+
+from werkzeug.utils import secure_filename
+from uuid import uuid4
 
 @app.route('/edit/<int:id>', methods=['GET', 'POST'])
 def edit_book(id):
@@ -125,16 +136,41 @@ def edit_book(id):
         category = request.form['category']
         password = request.form['password']
 
+        # Check password
         if password != ADMIN_PASSWORD:
             flash("Incorrect admin password.", "danger")
-            return redirect(f'/edit/{id}')
+            conn.close()
+            return redirect('/edit/' + str(id))
 
-        c.execute('UPDATE books SET title=?, author=?, price=?, category=? WHERE id=?',
-                  (title, author, price, category, id))
+        # Handle optional new image
+        image = None
+        if 'image' in request.files:
+            image_file = request.files['image']
+            if image_file and image_file.filename:
+                filename = f"{uuid4().hex}_{secure_filename(image_file.filename)}"
+                image_path = os.path.join(app.config['UPLOAD_FOLDER'], filename)
+                image_file.save(image_path)
+                image = filename
+
+        if image:
+            c.execute('UPDATE books SET title=?, author=?, price=?, category=?, image=? WHERE id=?',
+                      (title, author, price, category, image, id))
+        else:
+            c.execute('UPDATE books SET title=?, author=?, price=?, category=? WHERE id=?',
+                      (title, author, price, category, id))
+
         conn.commit()
         conn.close()
         flash("Book updated successfully!", "success")
         return redirect('/books')
+
+    # GET request
+    book = c.execute('SELECT * FROM books WHERE id=?', (id,)).fetchone()
+    categories = c.execute('SELECT DISTINCT category FROM books').fetchall()
+    categories = [cat[0] for cat in categories if cat[0]]
+    conn.close()
+
+    return render_template('edit_book.html', book=book, categories=categories)
 
     # 👉 GET: Fetch book and category list
     book = c.execute('SELECT * FROM books WHERE id=?', (id,)).fetchone()
