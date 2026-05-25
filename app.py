@@ -82,7 +82,7 @@ def book_list():
     return render_template('book_list.html', books=books, categories=categories,
                            selected_category=category, search=search)
 
-from uuid import uuid4  # Add this at the top if not already
+#from uuid import uuid4  # Add this at the top if not already
 
 # ➕ Add new book
 @app.route('/add', methods=['GET', 'POST'])
@@ -92,26 +92,28 @@ def add_book():
         author = request.form['author']
         price = float(request.form['price'])
         category = request.form['category']
-        image = None
 
-        # Handle image upload
+        image = None
         if 'image' in request.files:
             image_file = request.files['image']
             if image_file and image_file.filename:
-                # Rename image to prevent overwrite
                 filename = f"{uuid4().hex}_{secure_filename(image_file.filename)}"
                 image_path = os.path.join(app.config['UPLOAD_FOLDER'], filename)
                 image_file.save(image_path)
-                image = filename  # Store this name in DB
+                image = filename
 
         conn = sqlite3.connect(DB_PATH)
-        conn.execute(
+        c = conn.cursor()
+
+        c.execute(
             'INSERT INTO books (title, author, price, category, image) VALUES (?, ?, ?, ?, ?)',
             (title, author, price, category, image)
         )
+
         conn.commit()
         conn.close()
-        flash('Book added successfully!', 'success')
+
+        flash("Book added successfully!", "success")
         return redirect('/books')
 
     return render_template('add_book.html')
@@ -134,13 +136,15 @@ def edit_book(id):
         author = request.form['author']
         price = float(request.form['price'])
         category = request.form['category']
-        password = request.form['password']
+        #password = request.form['password']
 
         # Check password
-        if password != ADMIN_PASSWORD:
-            flash("Incorrect admin password.", "danger")
-            conn.close()
-            return redirect('/edit/' + str(id))
+         
+        #if password != 1234:
+           # flash("Incorrect admin password.", "danger")
+            #conn.close()
+            #return redirect('/edit/' + str(id))
+        
 
         # Handle optional new image
         image = None
